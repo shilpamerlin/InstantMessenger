@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import GoogleSignIn
 
-class ViewController: UIViewController,GIDSignInDelegate {
+class LoginViewController : UIViewController,GIDSignInDelegate {
     
     @IBOutlet weak var googleSignIn: UIButton!
     var spinner = UIActivityIndicatorView(style: .whiteLarge)
@@ -25,13 +25,11 @@ class ViewController: UIViewController,GIDSignInDelegate {
         }
     }
     
-    @IBAction func signInBtnTapped(_ sender: Any) {
-    }
     @IBAction func googleSignInTapped(_ sender: Any) {
        
         GIDSignIn.sharedInstance().signIn()
     }
-    
+    //life cycle methods
     override func viewDidLoad() {
     
         navigationController?.navigationBar.barTintColor = UIColor.systemIndigo
@@ -51,14 +49,13 @@ class ViewController: UIViewController,GIDSignInDelegate {
         let credentials = GoogleAuthProvider.credential(withIDToken: auth.idToken, accessToken: auth.accessToken)
         Auth.auth().signIn(with: credentials) { [self] (authResult, error) in
         if let error = error {
-        print(error.localizedDescription)
-        } else {
-            self.hideActivityIndicator()
-            self.performSegue(withIdentifier: "chat", sender: self)            
+            print(error.localizedDescription)
+            } else {
+                self.hideActivityIndicator()
+                self.performSegue(withIdentifier: "friends", sender: self)
             
+            }
         }
-    }
-    
     }
     func showActivityIndicator() {
         
@@ -66,12 +63,12 @@ class ViewController: UIViewController,GIDSignInDelegate {
             self.loadingView = UIView()
             self.loadingView.frame = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0)
             self.loadingView.center = self.view.center
-        self.loadingView.backgroundColor = UIColor.systemIndigo
+            self.loadingView.backgroundColor = UIColor.systemIndigo
             self.loadingView.alpha = 0.7
             self.loadingView.clipsToBounds = true
             self.loadingView.layer.cornerRadius = 10
 
-        self.spinner = UIActivityIndicatorView(style: .whiteLarge)
+            self.spinner = UIActivityIndicatorView(style: .whiteLarge)
             self.spinner.frame = CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0)
             self.spinner.center = CGPoint(x:self.loadingView.bounds.size.width / 2, y:self.loadingView.bounds.size.height / 2)
 
@@ -87,18 +84,6 @@ class ViewController: UIViewController,GIDSignInDelegate {
         }
     }
    
-}
-extension UITextField {
-func setIcon(_ image: UIImage) {
-   let iconView = UIImageView(frame:
-                  CGRect(x: 10, y: 5, width: 20, height: 20))
-   iconView.image = image
-   let iconContainerView: UIView = UIView(frame:
-                  CGRect(x: 20, y: 0, width: 30, height: 30))
-   iconContainerView.addSubview(iconView)
-   leftView = iconContainerView
-   leftViewMode = .always
-}
 }
 
 
